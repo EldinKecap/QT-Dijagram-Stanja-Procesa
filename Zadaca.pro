@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2023-03-28T22:52:56
+# Project created by QtCreator 2023-04-05T00:42:32
 #
 #-------------------------------------------------
 
@@ -8,13 +8,15 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = FirstProject
+TARGET = Zadaca
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        dialog.cpp \
+    stanje.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += dialog.h \
+    stanje.h
 
-FORMS    += mainwindow.ui
+FORMS    += dialog.ui
