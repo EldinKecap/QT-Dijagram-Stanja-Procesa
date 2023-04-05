@@ -14,11 +14,9 @@ Dialog::Dialog(QWidget *parent) :
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-    QBrush greenBrush(Qt::yellow);
     QBrush blueBrush(Qt::blue);
-    QPen outlinePen(Qt::black);
-    outlinePen.setWidth(2);
     scene->setBackgroundBrush(blueBrush);
+
     start = new Stanje(50,50,"Start");
     scene->addItem(start);
     ready = new Stanje(200,250,"Ready");
