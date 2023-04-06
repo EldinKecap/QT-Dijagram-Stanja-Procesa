@@ -20,16 +20,17 @@ void Stanje :: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QRectF rect(x, y, 100, 100);
     painter->drawEllipse(rect);
 
-    QFont font("Arial", 12, QFont::Bold);
+    QFont font("Arial", 13, QFont::Bold);
     painter->setFont(font);
     painter->drawText(QPointF(x + 30, y + 35), naslov);
 
-    QPainterPath path;
+    QPainterPath redCekanja;
     painter->setBrush(grayBrush);
     QRectF processContainer(x + 15, y + 55, 15, 15);
     for (int i = 0; i < 5; i++) {
-        path.addRect(processContainer);
+        redCekanja.addRect(processContainer);
         processContainer.translate(processContainer.width(), 0);
     }
-    painter->drawPath(path);
+    painter->drawPath(redCekanja);
 }
+

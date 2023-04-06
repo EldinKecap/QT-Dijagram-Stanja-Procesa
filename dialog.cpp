@@ -33,3 +33,29 @@ Dialog::~Dialog()
 {
     delete ui;
 }
+
+void Dialog::drawProcess(int x, int y)
+{
+    QBrush redBrush(Qt::red);
+    QPen pen(Qt::black);
+    pen.setWidth(1);
+    QGraphicsEllipseItem *proces = new QGraphicsEllipseItem(x,y,10,10);
+    proces->setBrush(redBrush);
+    proces->setPen(pen);
+    scene->addItem(proces);
+
+    scene->update();
+}
+
+void Dialog::on_kreirajProces_clicked()
+{
+    qDebug() << this->processStartArray.size();
+    if(this->processStartArray.size() < 5)
+    {
+    this->processStartArray.push_back(1);
+    for(int i=0; i < this->processStartArray.size(); i++)
+    {
+    this->drawProcess(68 + (15*i) ,108);
+    }
+    }
+}

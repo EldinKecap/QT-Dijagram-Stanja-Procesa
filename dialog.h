@@ -22,6 +22,9 @@ public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
 
+private slots:
+    void on_kreirajProces_clicked();
+
 private:
     Ui::Dialog *ui;
 
@@ -36,5 +39,9 @@ private:
     Stanje *wait;
     Stanje *run;
     Stanje *stop;
+
+    QVector<int> processStartArray;
+
+    void drawProcess(int x, int y);
 };
 #endif // DIALOG_H

@@ -7,6 +7,7 @@
 #include <QGraphicsEllipseItem>
 #include <QFont>
 #include <QString>
+#include <QVector>
 
 class Stanje : public QGraphicsEllipseItem
 {
