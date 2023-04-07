@@ -9,6 +9,8 @@
 #include <QGraphicsItem>
 #include "stanje.h"
 #include <QDebug>
+#include "tranzicija.h"
+
 
 namespace Ui {
 class Dialog;
@@ -39,6 +41,12 @@ private:
     Stanje *wait;
     Stanje *run;
     Stanje *stop;
+    Tranzicija *startReady;
+    Tranzicija *readyRun;
+    Tranzicija *runReady;
+    Tranzicija *runWait;
+    Tranzicija *waitReady;
+    Tranzicija *runStop;
 
     QVector<int> processStartArray;
 

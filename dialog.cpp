@@ -21,12 +21,25 @@ Dialog::Dialog(QWidget *parent) :
     scene->addItem(start);
     ready = new Stanje(200,250,"Ready");
     scene->addItem(ready);
-    wait = new Stanje(500,250,"Wait");
-    scene->addItem(wait);
-    run = new Stanje(350,450,"Run");
+    run = new Stanje(500,250,"Run");
     scene->addItem(run);
+    wait = new Stanje(350,450,"Wait");
+    scene->addItem(wait);
     stop = new Stanje(650,50,"Stop");
     scene->addItem(stop);
+
+    startReady = new Tranzicija(120,50,140,150);
+    scene->addItem(startReady);
+    readyRun = new Tranzicija(150,0,320,270);
+    scene->addItem(readyRun);
+    runReady = new Tranzicija(150,180,480,350);
+    scene->addItem(runReady);
+    runWait = new Tranzicija(120,130,520,360);
+    scene->addItem(runWait);
+    waitReady = new Tranzicija(120,230,350,460);
+    scene->addItem(waitReady);
+    runStop = new Tranzicija(120,310,580,250);
+    scene->addItem(runStop);
 }
 
 Dialog::~Dialog()
