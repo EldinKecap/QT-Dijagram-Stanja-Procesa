@@ -6,6 +6,34 @@ Tranzicija::Tranzicija(int duzina, int rotacija, int x, int y)
     this->rotacija = rotacija;
     this->x = x;
     this->y = y;
+    //setAcceptHoverEvents(true);
+}
+
+QRectF Tranzicija::boundingRect() const
+{
+    QRectF okvir;
+    switch(this->rotacija){
+    case 50:
+        okvir = QRectF(this->x - 10, this->y, 90, 105);
+        break;
+    case 0:
+        okvir = QRectF(this->x , this->y-10, 160, 40);
+        break;
+    case 180:
+        okvir = QRectF(this->x - 160 , this->y-25, 160, 40);
+        break;
+    case 130:
+        okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
+        break;
+    case 230:
+        okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
+        break;
+    case 310:
+        okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
+        break;
+    }
+
+    return okvir;
 }
 
 void Tranzicija::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget ){
@@ -14,11 +42,13 @@ void Tranzicija::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     // Set the pen and brush for the arrow
     painter->setPen(QPen(Qt::black, 2));
     painter->setBrush(Qt::green);
-    //this->setPos(100,100);
+    //HELPER FRAME FOR DRAWING OUT BOUNDING RECT
+    QRectF okvir = boundingRect();
+    painter->fillRect(okvir,Qt::green);
     // Define the points for the arrow
-    QVector<QPointF> points;
-    //points << QPointF(0, 20) << QPointF(0, 0)  << QPointF(100, 0)  << QPointF(100, -10) << QPointF(110, 10)  << QPointF(100, 30) << QPointF(100, 20);
-    points << QPointF(0, 15) << QPointF(0, 0)  << QPointF(this->duzina, 0) << QPointF(this->duzina, -10) << QPointF(this->duzina+10, 7 ) << QPointF(this->duzina, 25)<< QPointF(this->duzina, 15) << QPointF(0, 15);
+    QPolygon  points;
+
+    points << QPoint(0, 15) << QPoint(0, 0)  << QPoint(this->duzina, 0) << QPoint(this->duzina, -10) << QPoint(this->duzina+10, 7 ) << QPoint(this->duzina, 25)<< QPoint(this->duzina, 15) << QPoint(0, 15);
     // Create a QPainterPath object for the arrow
     QPainterPath path;
     path.addPolygon(QPolygonF(points));
@@ -27,6 +57,14 @@ void Tranzicija::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->rotate(this->rotacija);
     // Draw the arrow using the QPainterPath object
     painter->drawPath(path);
+    painter->setBackground(Qt::red);
+    update();
+}
 
-   }
+void Tranzicija::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+  qDebug()<<"awesome";
+  QGraphicsItem::mousePressEvent(event);
+}
+
 

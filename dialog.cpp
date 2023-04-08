@@ -1,6 +1,9 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 
+void logaj(){
+    qDebug() << "Polygon item clicked!";
+}
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -32,7 +35,7 @@ Dialog::Dialog(QWidget *parent) :
     scene->addItem(startReady);
     readyRun = new Tranzicija(150,0,320,270);
     scene->addItem(readyRun);
-    runReady = new Tranzicija(150,180,480,350);
+    runReady = new Tranzicija(150,180,480,330);
     scene->addItem(runReady);
     runWait = new Tranzicija(120,130,520,360);
     scene->addItem(runWait);
@@ -41,6 +44,8 @@ Dialog::Dialog(QWidget *parent) :
     runStop = new Tranzicija(120,310,580,250);
     scene->addItem(runStop);
 }
+
+
 
 Dialog::~Dialog()
 {
