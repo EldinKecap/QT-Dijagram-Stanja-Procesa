@@ -9,6 +9,8 @@ Tranzicija::Tranzicija(int duzina, int rotacija, int x, int y)
     //setAcceptHoverEvents(true);
 }
 
+
+
 QRectF Tranzicija::boundingRect() const
 {
     QRectF okvir;
@@ -26,10 +28,10 @@ QRectF Tranzicija::boundingRect() const
         okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
         break;
     case 230:
-        okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
+        okvir = QRectF(this->x-85  , this->y-105 , 95, 105);
         break;
     case 310:
-        okvir = QRectF(this->x-90  , this->y-5 , 90, 100);
+        okvir = QRectF(this->x+5  , this->y-98 , 90, 105);
         break;
     }
 
@@ -39,22 +41,27 @@ QRectF Tranzicija::boundingRect() const
 void Tranzicija::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget ){
        Q_UNUSED(option);
        Q_UNUSED(widget);
+
     // Set the pen and brush for the arrow
     painter->setPen(QPen(Qt::black, 2));
     painter->setBrush(Qt::green);
+
     //HELPER FRAME FOR DRAWING OUT BOUNDING RECT
-    QRectF okvir = boundingRect();
-    painter->fillRect(okvir,Qt::green);
+    //QRectF okvir = boundingRect();
+    //painter->fillRect(okvir,Qt::green);
+
     // Define the points for the arrow
     QPolygon  points;
-
     points << QPoint(0, 15) << QPoint(0, 0)  << QPoint(this->duzina, 0) << QPoint(this->duzina, -10) << QPoint(this->duzina+10, 7 ) << QPoint(this->duzina, 25)<< QPoint(this->duzina, 15) << QPoint(0, 15);
+
     // Create a QPainterPath object for the arrow
     QPainterPath path;
     path.addPolygon(QPolygonF(points));
-    // Rotate the arrow by 45 degrees
+
+    // Rotate the arrow
     painter->translate(this->x,this->y);
     painter->rotate(this->rotacija);
+
     // Draw the arrow using the QPainterPath object
     painter->drawPath(path);
     painter->setBackground(Qt::red);
@@ -63,7 +70,8 @@ void Tranzicija::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 
 void Tranzicija::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-  qDebug()<<"awesome";
+  qDebug()<<this->rotacija;
+  emit pomjeri_proces();
   QGraphicsItem::mousePressEvent(event);
 }
 
