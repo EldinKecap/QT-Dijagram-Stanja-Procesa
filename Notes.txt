@@ -1,1 +1,0 @@
-STAVI NA 0,0 proces pa onda probaj da ISTI proces prolazi kroz sve arrays
