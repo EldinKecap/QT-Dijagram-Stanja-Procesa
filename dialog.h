@@ -60,47 +60,108 @@ private:
     QVector<QGraphicsEllipseItem*> processWaitArray;
     QVector<QGraphicsEllipseItem*> processStopArray;
 
-    int processReadyArrayIndex ;
+    void animationStart(int indexOfProcess,int limitX, int limitY , QVector<QGraphicsEllipseItem*> arrayToAnimate, bool forward, bool down);
+    int processArrayIndex ;
+    float xAnimationPositionIncrement;
+    float yAnimationPositionIncrement;
+    float animationLimitX;
+    float animationLimitY;
+    bool incrementSet;
+    bool forward;
+    bool down;
+
+    QVector<QGraphicsEllipseItem*> animatingArray;
 
     QGraphicsEllipseItem* drawProcess(int x, int y);
     QTimer *timer;
 private slots:
     void moveCircle()
     {
-        // get the current position of the circle item
-         processReadyArray[processReadyArrayIndex]->x();
 
-        int limitX = 100;
-        int limitY = 100;
-        switch(processReadyArrayIndex){
-            case 0:
-            limitX = 218;
-            limitY = 308;
-            break;
+        float limitX = animationLimitX + (15 * processArrayIndex);
+        float limitY = animationLimitY;
+
+        if(!incrementSet){
+            if(forward && down){
+                xAnimationPositionIncrement = (1.0/100)*(limitX - animatingArray[processArrayIndex]->pos().x());
+                yAnimationPositionIncrement = (1.0/100)*(limitY - animatingArray[processArrayIndex]->pos().y());
+            }else if(!forward && !down){
+                xAnimationPositionIncrement = (1.0/100)*(animatingArray[processArrayIndex]->pos().x() - limitX);
+                yAnimationPositionIncrement = (1.0/100)*(animatingArray[processArrayIndex]->pos().y() - limitY);
+            }else if(!forward && down){
+                xAnimationPositionIncrement = (1.0/100)*(animatingArray[processArrayIndex]->pos().x() - limitX);
+                yAnimationPositionIncrement = (1.0/100)*(limitY - animatingArray[processArrayIndex]->pos().y());
+            }else if(forward && !down){
+                xAnimationPositionIncrement = (1.0/100)*(limitX -animatingArray[processArrayIndex]->pos().x() );
+                yAnimationPositionIncrement = (1.0/100)*(animatingArray[processArrayIndex]->pos().y() - limitY);
+            }
+
+            incrementSet = true;
         }
-        // calculate the new position
-        qreal x = processReadyArray[processReadyArrayIndex]->boundingRect().x() + 1;
 
-        qreal y = processReadyArray[processReadyArrayIndex]->boundingRect().y() + 1;
-        //
+        qreal x;
+        qreal y;
 
-        qDebug()<< x <<' '<<y;
-//        timer->stop();
-
-        //
-        if(y > limitY ){
-            y = limitY;
+        if(forward && down){
+            x = animatingArray[processArrayIndex]->pos().x() + xAnimationPositionIncrement;
+            y = animatingArray[processArrayIndex]->pos().y() + yAnimationPositionIncrement;
+        }else if(!forward && !down){
+            x = animatingArray[processArrayIndex]->pos().x() - xAnimationPositionIncrement;
+            y = animatingArray[processArrayIndex]->pos().y() - yAnimationPositionIncrement;
+        }else if(!forward && down){
+            x = animatingArray[processArrayIndex]->pos().x() - xAnimationPositionIncrement;
+            y = animatingArray[processArrayIndex]->pos().y() + yAnimationPositionIncrement;
+        }else if(forward && !down){
+            x = animatingArray[processArrayIndex]->pos().x() + xAnimationPositionIncrement;
+            y = animatingArray[processArrayIndex]->pos().y() - yAnimationPositionIncrement;
         }
-        if(x > limitX ){
-            x = limitX;
-        }
+
+//        qDebug()<< x<<' '<<y;
+
+        if(forward && down){
+            if(x > limitX ){
+                x = limitX;
+            }
+            if(y > limitY ){
+                y = limitY;
+            }
+        }else if(!forward && !down){
+            if(x < limitX ){
+                x = limitX;
+            }
+            if(y < limitY ){
+                y = limitY;
+            }
+        } else if(!forward && down){
+            if(x < limitX ){
+                x = limitX;
+            }
+            if(y > limitY ){
+                y = limitY;
+            }
+        } else if(forward && !down){
+            if(x > limitX ){
+                x = limitX;
+            }
+            if(y < limitY ){
+                y = limitY;
+            }
+    }
+
         // set the new position
-        this->processReadyArray[processReadyArrayIndex]->setPos(x, y);
-        this->processReadyArray[processReadyArrayIndex]->boundingRect().setX(x);
-        this->processReadyArray[processReadyArrayIndex]->boundingRect().setY(y);
+        this->animatingArray[processArrayIndex]->setPos(x, y);
+//        this->processReadyArray[0]->boundingRect().setX(x);
+//        this->processReadyArray[0]->boundingRect().setY(y);
         // check if the circle has reached the destination
-        if (x >= limitX  && y >= limitY) {
+        if (x == limitX  && y == limitY) {
             // stop the timer
+            incrementSet = false;
+            startReady->setEnabled(true);
+            readyRun->setEnabled(true);
+            runReady->setEnabled(true);
+            runWait->setEnabled(true);
+            waitReady->setEnabled(true);
+            runStop->setEnabled(true);
             timer->stop();
         }
         scene->update();

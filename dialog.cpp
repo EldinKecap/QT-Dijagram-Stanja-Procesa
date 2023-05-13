@@ -51,8 +51,6 @@ Dialog::Dialog(QWidget *parent) :
     connect(waitReady,SIGNAL(pomjeri_proces()),this,SLOT(moveProcessWaitToReady()));
     connect(runStop,SIGNAL(pomjeri_proces()),this,SLOT(moveProcessRunToStop()));
 
-//    this->drawProcess(668,108);
-
 }
 
 
@@ -67,9 +65,10 @@ QGraphicsEllipseItem *Dialog::drawProcess(int x, int y)
     QBrush redBrush(Qt::red);
     QPen pen(Qt::black);
     pen.setWidth(1);
-    QGraphicsEllipseItem *proces = new QGraphicsEllipseItem(x,y,10,10);
+    QGraphicsEllipseItem *proces = new QGraphicsEllipseItem(0,0,10,10);
     proces->setBrush(redBrush);
     proces->setPen(pen);
+    proces->setPos(x,y);
     scene->addItem(proces);
 
     scene->update();
@@ -79,7 +78,7 @@ QGraphicsEllipseItem *Dialog::drawProcess(int x, int y)
 
 void Dialog::on_kreirajProces_clicked()
 {
-//    qDebug() << this->processStartArray.size();
+
     if(this->processStartArray.size() < 5)
     {
 
@@ -93,13 +92,10 @@ void Dialog::on_kreirajProces_clicked()
 
         for(int i=0; i < this->processStartArray.size(); i++)
         {
-
         if(this->processStartArray[i]==NULL){
             this->processStartArray[i]=this->drawProcess(68 + (15*i) ,108);
             break;
         }
-
-
         }
     }
 }
@@ -159,29 +155,14 @@ void Dialog::moveProcessStartToReady()
             if(this->processReadyArray[i] == NULL){
                 this->processReadyArray[i] = this->processStartArray[indexOfNextInLine];
                 this->processStartArray[indexOfNextInLine] = NULL;
-                if(i == indexOfNextInLine){
-                    this->processReadyArray[i]->setPos(150,200);
-                }else{
-                    this->processReadyArray[i]->setPos(150+(15*(i-indexOfNextInLine)),200);
-                }
+                this->animationStart(i,218,308,processReadyArray,true,true);
                 break;
             }
 
 
         }
- //        timer = new QTimer(this);
- //        connect(timer, SIGNAL(timeout()), this, SLOT(moveCircle()));
 
-//        qDebug()<<indexOfNextInLine;
-//        qDebug()<<this->processReadyArray;
-//        for(int i=0; i < this->processReadyArray.size(); i++)
-//        {
 
-//                this->processReadyArray[i]->setPos(150,200);
-
-//        }
-        // start the timer
- //        timer->start(10);
     }
 
 }
@@ -210,36 +191,13 @@ void Dialog::moveProcessReadyToRun()
                 qDebug()<<this->processReadyArray;
                 for(int i = 0 ; i < this->processRunArray.size(); i++ ){
                     if(this->processRunArray[i] == NULL){
-                        this->processRunArray[i] = this->drawProcess(518+15*i,308);
-                        scene->removeItem(this->processReadyArray[indexOfNextInLine]);
+                        this->processRunArray[i] = this->processReadyArray[indexOfNextInLine];
                         this->processReadyArray[indexOfNextInLine] = NULL;
+                        this->animationStart(i,518,308,processRunArray,true,true);
                         break;
+                        }
                     }
-
-// ///////////////////////////////////////////////////////////////////
-//        int indexOfNextInLine = findArrayIndex(processReadyArray);
-//        qDebug()<<this->processReadyArray;
-//        for(int i = 0 ; i < this->processRunArray.size(); i++ ){
-//            if(this->processRunArray[i] == NULL){
-//                this->processRunArray[i] = this->processReadyArray[indexOfNextInLine];
-//                this->processReadyArray[indexOfNextInLine] = NULL;
-//                if(i == indexOfNextInLine){
-//                    this->processRunArray[i]->setPos(450,200);
-//                }else if(this->processRunArray[i]->pos().x() < 150){
-//                    this->processRunArray[i]->setPos(450+(15*(indexOfNextInLine)),200);
-//                }else if(this->processRunArray[i]->pos().x() > 150){
-//                    this->processRunArray[i]->setPos(450+(15*(i)),200);
-//                }else{
-//                    this->processRunArray[i]->setPos(450+(15*(i-indexOfNextInLine)),200);
-//                }
-//                break;
-//            }
-// /////////////////////////////////////////////////////////////////
-        }
     }
-//    qDebug()<<this->processRunArray;
-
-
 }
 
 void Dialog::moveProcessRunToReady()
@@ -259,8 +217,8 @@ void Dialog::moveProcessRunToReady()
                 qDebug()<<this->processRunArray;
                 for(int i = 0 ; i < this->processRunArray.size(); i++ ){
                     if(this->processReadyArray[i] == NULL){
-                        this->processReadyArray[i] = this->drawProcess(218+15*i,308);
-                        scene->removeItem(this->processRunArray[indexOfNextInLine]);
+                        this->processReadyArray[i] = this->processRunArray[indexOfNextInLine];
+                        this->animationStart(i,218,308,processReadyArray,false,false);
                         this->processRunArray[indexOfNextInLine] = NULL;
                         break;
                     }
@@ -292,14 +250,14 @@ void Dialog::moveProcessRunToWait()
                 qDebug()<<this->processRunArray;
                 for(int i = 0 ; i < this->processWaitArray.size(); i++ ){
                     if(this->processWaitArray[i] == NULL){
-                        this->processWaitArray[i] = this->drawProcess(368+15*i,508);
-                        scene->removeItem(this->processRunArray[indexOfNextInLine]);
+                        this->processWaitArray[i] = this->processRunArray[indexOfNextInLine];
                         this->processRunArray[indexOfNextInLine] = NULL;
+                        this->animationStart(i,368,508,processWaitArray,false,true);
                         break;
                     }
         }
     }
-    qDebug()<<this->processWaitArray;
+
 
 }
 
@@ -319,9 +277,9 @@ void Dialog::moveProcessWaitToReady()
                 qDebug()<<this->processWaitArray;
                 for(int i = 0 ; i < this->processWaitArray.size(); i++ ){
                     if(this->processReadyArray[i] == NULL){
-                        this->processReadyArray[i] = this->drawProcess(218+15*i,308);
-                        scene->removeItem(this->processWaitArray[indexOfNextInLine]);
+                        this->processReadyArray[i] = this->processWaitArray[indexOfNextInLine];
                         this->processWaitArray[indexOfNextInLine] = NULL;
+                        this->animationStart(i,218,308,processReadyArray,false,false);
                         break;
                     }
                 }
@@ -352,14 +310,32 @@ void Dialog::moveProcessRunToStop()
                 qDebug()<<this->processRunArray;
                 for(int i = 0 ; i < this->processStopArray.size(); i++ ){
                     if(this->processStopArray[i] == NULL){
-                        this->processStopArray[i] = this->drawProcess(668+15*i,108);
-                        scene->removeItem(this->processRunArray[indexOfNextInLine]);
+                        this->processStopArray[i] = this->processRunArray[indexOfNextInLine] ;
                         this->processRunArray[indexOfNextInLine] = NULL;
+                        this->animationStart(i,668,108,processStopArray,true,false);
                         break;
                     }
         }
     }
-    qDebug()<<this->processStopArray;
+}
+
+void Dialog::animationStart(int indexOfProcess, int limitX, int limitY, QVector<QGraphicsEllipseItem *> arrayToAnimate, bool forward, bool down)
+{
+    processArrayIndex = indexOfProcess;
+    animationLimitX = limitX;
+    animationLimitY = limitY;
+    animatingArray = arrayToAnimate;
+    startReady->setEnabled(false);
+    readyRun->setEnabled(false);
+    runReady->setEnabled(false);
+    runWait->setEnabled(false);
+    waitReady->setEnabled(false);
+    runStop->setEnabled(false);
+    timer = new QTimer(this);
+    this->forward = forward;
+    this->down = down;
+    connect(timer, SIGNAL(timeout()), this, SLOT(moveCircle()));
+    timer->start(1);
 }
 
 void Dialog::on_unistiProces_clicked()
